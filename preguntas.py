@@ -11,6 +11,8 @@ Utilice el archivo `data.csv` para resolver las preguntas.
 
 
 """
+from collections import Counter
+import itertools
 file = open("data.csv", "r").readlines()
 file = [line.replace("\n", "") for line in file]
 file = [line.split("\t") for line in file]
@@ -42,7 +44,10 @@ def pregunta_02():
     ]
 
     """
-    return
+    
+    list_tuples = list(Counter([line[0] for line in file]).items())
+    list_tuples.sort()
+    return list_tuples
 
 
 def pregunta_03():
@@ -60,7 +65,18 @@ def pregunta_03():
     ]
 
     """
-    return
+    
+    tuplas = [(line[0], line[1]) for line in file]
+    counter = {}
+    for key, value in tuplas:
+            if key in counter:
+                counter[key] += int(value)
+            else:
+                counter[key] = int(value)
+
+    tuplas = [(key, counter[key]) for key in counter]
+    tuplas.sort()
+    return tuplas
 
 
 def pregunta_04():
@@ -85,7 +101,10 @@ def pregunta_04():
     ]
 
     """
-    return
+    dates = [line[2].split('-')[1] for line in file]
+    dates = list(Counter(dates).items())
+    dates.sort()
+    return dates
 
 
 def pregunta_05():
@@ -103,7 +122,13 @@ def pregunta_05():
     ]
 
     """
-    return
+    tuplas = [(line[0], int(line[1])) for line in file]
+    tuplas= sorted(tuplas)
+    res = []
+    for key, group in itertools.groupby(tuplas, lambda x : x[0]):
+        max_min_values =  (lambda group_list: (max(group_list)[1], min(group_list)[1]))(list(group))
+        res.append(tuple(key) + max_min_values)
+    return res
 
 
 def pregunta_06():
