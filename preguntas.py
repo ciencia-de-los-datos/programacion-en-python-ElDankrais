@@ -153,7 +153,14 @@ def pregunta_06():
     ]
 
     """
-    return
+    diccionarios = [tuple(dictionario.split(':')) for line in file for dictionario in line[4].split(',')]
+    diccionarios = sorted([(key, int(val)) for key,val in diccionarios])
+    res= []
+    for key, group in itertools.groupby(diccionarios, lambda x : x[0]):
+        max_min_values =  (lambda group_list: (min(group_list)[1], max(group_list)[1]))(list(group))
+        tupla = (key, max_min_values[0], max_min_values[1])
+        res.append(tupla)
+    return res
 
 
 def pregunta_07():
@@ -177,7 +184,13 @@ def pregunta_07():
     ]
 
     """
-    return
+    tuplas = [(line[0], int(line[1])) for line in file]
+    tuplas= sorted(tuplas, key= lambda x : x[1])
+    res = []
+    for key, group in itertools.groupby(tuplas, lambda x : x[1]):
+        claves = [value[0] for value in list(group)]
+        res.append((key,claves))
+    return res
 
 
 def pregunta_08():
@@ -202,7 +215,8 @@ def pregunta_08():
     ]
 
     """
-    return
+    tuplas =  pregunta_07()
+    return [(key, sorted([*set(value)])) for key,value in tuplas]
 
 
 def pregunta_09():
@@ -225,7 +239,9 @@ def pregunta_09():
     }
 
     """
-    return
+    diccionarios = [list(dictionario.split(':'))[0] for line in file for dictionario in line[4].split(',')]
+    diccionarios = dict(sorted(Counter(diccionarios).items()))
+    return diccionarios
 
 
 def pregunta_10():
@@ -246,7 +262,8 @@ def pregunta_10():
 
 
     """
-    return
+    tuplas = [(line[0], len(line[3].split(',')), len(line[4].split(','))) for line in file]
+    return tuplas
 
 
 def pregunta_11():
