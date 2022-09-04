@@ -292,9 +292,7 @@ def pregunta_11():
             else:
                 counter[key] = int(value)
 
-    tuplas = [(key, counter[key]) for key in counter]
-    tuplas.sort()
-    return tuplas
+    return dict(sorted(counter.items()))
 
 
 def pregunta_12():
