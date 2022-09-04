@@ -284,7 +284,17 @@ def pregunta_11():
 
 
     """
-    return
+    tuplas = [(letter,line[1]) for line in file for letter in line[3].split(',')]
+    counter = {}
+    for key, value in tuplas:
+            if key in counter:
+                counter[key] += int(value)
+            else:
+                counter[key] = int(value)
+
+    tuplas = [(key, counter[key]) for key in counter]
+    tuplas.sort()
+    return tuplas
 
 
 def pregunta_12():
@@ -302,4 +312,13 @@ def pregunta_12():
     }
 
     """
-    return
+    suma = lambda lista : sum(list(map(lambda element: int(element.split(':')[1]), lista.split(','))))
+    diccionarios = [(line[0], suma(line[4])) for line in file]
+    counter = {}
+    for key, value in diccionarios:
+            if key in counter:
+                counter[key] += int(value)
+            else:
+                counter[key] = int(value)
+    return dict(sorted(counter.items()))
+    
