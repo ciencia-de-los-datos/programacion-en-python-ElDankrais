@@ -11,6 +11,11 @@ Utilice el archivo `data.csv` para resolver las preguntas.
 
 
 """
+from collections import Counter
+import itertools
+file = open("data.csv", "r").readlines()
+file = [line.replace("\n", "") for line in file]
+file = [line.split("\t") for line in file]
 
 
 def pregunta_01():
@@ -21,7 +26,7 @@ def pregunta_01():
     214
 
     """
-    return
+    return sum([int(line[1]) for line in file])
 
 
 def pregunta_02():
@@ -39,7 +44,10 @@ def pregunta_02():
     ]
 
     """
-    return
+    
+    list_tuples = list(Counter([line[0] for line in file]).items())
+    list_tuples.sort()
+    return list_tuples
 
 
 def pregunta_03():
@@ -57,7 +65,18 @@ def pregunta_03():
     ]
 
     """
-    return
+    
+    tuplas = [(line[0], line[1]) for line in file]
+    counter = {}
+    for key, value in tuplas:
+            if key in counter:
+                counter[key] += int(value)
+            else:
+                counter[key] = int(value)
+
+    tuplas = [(key, counter[key]) for key in counter]
+    tuplas.sort()
+    return tuplas
 
 
 def pregunta_04():
@@ -82,7 +101,10 @@ def pregunta_04():
     ]
 
     """
-    return
+    dates = [line[2].split('-')[1] for line in file]
+    dates = list(Counter(dates).items())
+    dates.sort()
+    return dates
 
 
 def pregunta_05():
@@ -100,7 +122,13 @@ def pregunta_05():
     ]
 
     """
-    return
+    tuplas = [(line[0], int(line[1])) for line in file]
+    tuplas= sorted(tuplas)
+    res = []
+    for key, group in itertools.groupby(tuplas, lambda x : x[0]):
+        max_min_values =  (lambda group_list: (max(group_list)[1], min(group_list)[1]))(list(group))
+        res.append(tuple(key) + max_min_values)
+    return res
 
 
 def pregunta_06():
@@ -125,7 +153,14 @@ def pregunta_06():
     ]
 
     """
-    return
+    diccionarios = [tuple(dictionario.split(':')) for line in file for dictionario in line[4].split(',')]
+    diccionarios = sorted([(key, int(val)) for key,val in diccionarios])
+    res= []
+    for key, group in itertools.groupby(diccionarios, lambda x : x[0]):
+        max_min_values =  (lambda group_list: (min(group_list)[1], max(group_list)[1]))(list(group))
+        tupla = (key, max_min_values[0], max_min_values[1])
+        res.append(tupla)
+    return res
 
 
 def pregunta_07():
@@ -149,7 +184,13 @@ def pregunta_07():
     ]
 
     """
-    return
+    tuplas = [(line[0], int(line[1])) for line in file]
+    tuplas= sorted(tuplas, key= lambda x : x[1])
+    res = []
+    for key, group in itertools.groupby(tuplas, lambda x : x[1]):
+        claves = [value[0] for value in list(group)]
+        res.append((key,claves))
+    return res
 
 
 def pregunta_08():
@@ -174,7 +215,8 @@ def pregunta_08():
     ]
 
     """
-    return
+    tuplas =  pregunta_07()
+    return [(key, sorted([*set(value)])) for key,value in tuplas]
 
 
 def pregunta_09():
@@ -197,7 +239,9 @@ def pregunta_09():
     }
 
     """
-    return
+    diccionarios = [list(dictionario.split(':'))[0] for line in file for dictionario in line[4].split(',')]
+    diccionarios = dict(sorted(Counter(diccionarios).items()))
+    return diccionarios
 
 
 def pregunta_10():
@@ -218,7 +262,8 @@ def pregunta_10():
 
 
     """
-    return
+    tuplas = [(line[0], len(line[3].split(',')), len(line[4].split(','))) for line in file]
+    return tuplas
 
 
 def pregunta_11():
@@ -239,7 +284,15 @@ def pregunta_11():
 
 
     """
-    return
+    tuplas = [(letter,line[1]) for line in file for letter in line[3].split(',')]
+    counter = {}
+    for key, value in tuplas:
+            if key in counter:
+                counter[key] += int(value)
+            else:
+                counter[key] = int(value)
+
+    return dict(sorted(counter.items()))
 
 
 def pregunta_12():
@@ -257,4 +310,13 @@ def pregunta_12():
     }
 
     """
-    return
+    suma = lambda lista : sum(list(map(lambda element: int(element.split(':')[1]), lista.split(','))))
+    diccionarios = [(line[0], suma(line[4])) for line in file]
+    counter = {}
+    for key, value in diccionarios:
+            if key in counter:
+                counter[key] += int(value)
+            else:
+                counter[key] = int(value)
+    return dict(sorted(counter.items()))
+    
